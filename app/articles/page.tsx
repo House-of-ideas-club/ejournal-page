@@ -8,6 +8,7 @@ import useSWR from "swr";
 
 
 
+
 async  function   fetchArticle(): Promise<Tables<'articles'>[]>  {
     return await fetch<Tables<'articles'>>(
         "articles",
@@ -54,7 +55,7 @@ export default  function Home(){
                             />
                         ))}
                 </div>
-                {/*<SubFooter></SubFooter>*/}
+
             </div>
 
         </div>

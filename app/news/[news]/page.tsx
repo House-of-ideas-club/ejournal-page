@@ -11,6 +11,8 @@ import useSWR from "swr";
 import {use} from "react";
 import ShareButtons from "@/components/ShareButton";
 import {Spinner} from "@/components/ui/Spinner";
+import {useRouter} from "next/navigation";
+import {fetchCategoryById} from "@/components/ui/Carousel";
 
 
 async function fetchArticleById(Id: string): Promise<any> {
@@ -39,7 +41,12 @@ export default function NewsPage({ params: paramsPromise }: { params: Promise<{ 
     const params = use(paramsPromise);
     const {data:MoreNews} = useSWR('/news',()=>MoreNewsfetcher(params.news));
     const { data:featuredNews  } = useSWR<Tables<"news">>(`/news/${params.news}`, () => fetchArticleById(params.news));
+    const router = useRouter();
+    const handleRouterClick = (news:number) => {
 
+        router.push(`/news/${news}`);
+
+    };
     if (!featuredNews) {
         return (
             <div className="min-h-screen flex justify-center items-center">
@@ -117,6 +124,7 @@ export default function NewsPage({ params: paramsPromise }: { params: Promise<{ 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {MoreNews?.map((news, index) => (
                         <motion.div
+                            onClick={()=> handleRouterClick(news.id)}
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}

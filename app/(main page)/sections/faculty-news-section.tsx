@@ -112,7 +112,7 @@ export default function FacultyNewsSection() {
                                 <div
                                     onClick={()=>handleRouterClick(item.id)}
                                     key={item.id}
-                                    className={`group relative overflow-hidden rounded-xl transition-all duration-300 ease-in-out
+                                    className={`group relative  overflow-hidden rounded-xl transition-all duration-300 ease-in-out
                 ${hoveredItem !== null && hoveredItem !== item.id ? "opacity-60" : "opacity-100"}
                 ${index === 2 ? "col-span-2 row-span-1" : "col-span-1"}
             `}
@@ -224,6 +224,7 @@ export default function FacultyNewsSection() {
                                 {data.map((item) => (
                                     <div
                                         key={item.id}
+                                        onClick={()=>handleRouterClick(item.id)}
                                         className="group max-h-[22dvh] h-[12rem]  overflow-hidden rounded-xl transition-all duration-300 ease-in-out"
                                     >
                                         <div className="aspect-video h-full relative">

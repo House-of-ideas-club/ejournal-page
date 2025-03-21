@@ -11,6 +11,7 @@ import { Spinner } from "@/components/ui/Spinner";
 import {Card} from "@/components/ui/Card";
 import {BsJournal} from "react-icons/bs";
 import ShareButtons from "@/components/ShareButton";
+import {useRouter} from "next/navigation";
 
 async function fetchArticleById(Id: number): Promise<any> {
     const result = await fetch<Tables<"articles">[]>(
@@ -45,7 +46,10 @@ export default function ArticlePage({ params: paramsPromise }: { params: Promise
         `/${article?.category_id}/${article?.id_article}`,
         () => (article?.category_id ? fetchArticlesByCategory(article.category_id,article.id_article) : Promise.resolve([]))
     );
-
+    const router = useRouter();
+    const handleRouterClick = (category:string,article:number) => {
+        router.push(`/articles/${category}/${article}`);
+    };
     if (!article) {
         return (
             <div className="min-h-screen flex justify-center items-center">
@@ -116,6 +120,7 @@ export default function ArticlePage({ params: paramsPromise }: { params: Promise
                             {RelatedArticles?.map((article, index) => (
                                 <motion.div
                                     key={index}
+                                    onClick={()=>handleRouterClick(params.category,article.id_article)}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -139,10 +144,13 @@ export default function ArticlePage({ params: paramsPromise }: { params: Promise
                                             <h3 className="font-medium text-white mb-2 group-hover:text-purple-400 transition-colors duration-300 line-clamp-2">
                                                 {article.article_name}
                                             </h3>
+                                            <p className="line-clamp-2 text-base text-gray-600 dark:text-gray-400">{article.intro}</p>
 
                                             <div className="mt-auto pt-4 flex justify-between items-center">
-                                                <span className="text-xs text-gray-400">{article.average_read}</span>
-                                                <ArrowRight className="h-4 w-4 text-purple-400 transform transition-transform duration-300 group-hover:translate-x-1" />
+                                                <span className="text-sm text-gray-400 inline-flex "><Clock
+                                                    className='h-auto w-4 mr-1'/> {article.average_read} mn</span>
+                                                <ArrowRight
+                                                    className="h-4 w-4 text-purple-400 transform transition-transform duration-300 group-hover:translate-x-1"/>
                                             </div>
                                         </div>
                                     </div>

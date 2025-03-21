@@ -28,14 +28,14 @@ export function MiniArticleCard({ title,category,id, date, readTime }: MiniArtic
     return (
         <div
             onClick={()=>handleRouterClick(category,id)}
-            className="block p-3 text-start border-b-[1px] mx-3 cursor-default hover:translate-y-[2px]  transition-colors duration-200"
+            className="block p-3 text-start my-2 border-b-[1px] mx-3 cursor-default hover:bg-neutral-900 rounded-sm  transition-colors duration-200"
         >
             <h1 className="font-medium text-start text-xs line-clamp-1 mb-2">{title}</h1>
             <div className="flex items-center text-xs text-gray-500 space-x-3">
                 <span>{date}</span>
                 <div className="flex items-center">
                     <Clock className="h-3 w-3 mr-1" />
-                    <span>{readTime} min read</span>
+                    <span>{readTime} mn</span>
                 </div>
             </div>
         </div>

@@ -63,7 +63,7 @@ export default function NewsCardList() {
                         <CardFooter className="p-3 pt-0 flex justify-between items-center relative z-10">
                             <div className="flex items-center text-xs text-muted-foreground">
                                 <Clock className="h-3 w-3 mr-1" />
-                                {item.average_read}
+                                {item.average_read}mn
                             </div>
                             <Link
                                 href={`/news/${item.id}`}

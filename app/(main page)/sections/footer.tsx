@@ -44,7 +44,7 @@ export default function Footer() {
                             Let's Connect
                         </h2>
                         <div className="dark:text-white min-w-full max-w-md">
-                            <DescriptionFliper className="text-sm  sm:text-base md:text-xl" paragraph={paragraph} />
+                            {paragraph}
                         </div>
                     </div>
 

@@ -6,22 +6,7 @@ export default function SubFooter() {
         <footer  id='ContactUs' className="w-full border-t-[1px] border-neutral-800   mt-4  overflow-hidden">
             <div className="mx-auto w-full">
                 <div className="grid py-6 grid-cols-2">
-
-                        <div>
-                            <ul className="text-gray-500 text-xs dark:text-gray-400 font-medium">
-
-                                <li className="mb-4">
-                                    <a href="https://www.univ-alger3.dz/en/" className="hover:underline ">university of algiers 3
-                                    </a>
-                                </li>
-
-                                <li>
-
-                                    <span >hoi.univalger3@gmail.com</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
+                    <div>
                             <ul
 
                                 className="text-gray-500 text-xs dark:text-gray-400 font-medium">

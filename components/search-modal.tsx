@@ -9,55 +9,52 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import {motion} from "motion/react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/Tabs";
+import {fetch} from "@/utils/supabase/client-api";
+import {Tables} from "@/utils/types";
+import useSWR from "swr";
+import {Clock1Icon, ClockAlert} from "lucide-react";
 
-// Mock search results
-const searchResults = [
-    {
-        id: 1,
-        title: "Introduction to React",
-        content:
-            "React is a popular JavaScript library for building user interfaces. It allows developers to create reusable UI components.",
-        tag: "React",
-    },
-    {
-        id: 2,
-        title: "Getting Started with Next.js",
-        content:
-            "Next.js is a React framework that enables functionality such as server-side rendering and generating static websites for React based web applications.",
-        tag: "Next.js",
-    },
-    {
-        id: 3,
-        title: "Tailwind CSS Basics",
-        content:
-            "Tailwind CSS is a utility-first CSS framework that allows you to rapidly build custom user interfaces without writing custom CSS.",
-        tag: "CSS",
-    },
-    {
-        id: 4,
-        title: "TypeScript Fundamentals",
-        content:
-            "TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. It adds optional types, classes, and modules to JavaScript.",
-        tag: "TypeScript",
-    },
-    {
-        id: 5,
-        title: "State Management with Redux",
-        content:
-            "Redux is a predictable state container for JavaScript apps. It helps you write applications that behave consistently and are easy to test.",
-        tag: "Redux",
-    },
-]
+
+
+
+const Newsfetcher = async (news_title:string) => {
+
+    return await fetch<Tables<'news'>>(
+        "news",
+        ["*"],
+        (q) => q.ilike("news_title", `%${news_title}%`)
+    ) as Tables<'news'>[];
+
+
+
+}
+
+const articlefetcher = async (article_name:string) => {
+
+    return await fetch<Tables<'articles'>>(
+        "articles",
+        ["*"],
+        (q) => q.ilike("article_name", `%${article_name}%`)
+    ) as Tables<'articles'>[];
+
+
+
+}
+
+
+
 
 export default function SearchModal() {
     const [isOpen, setIsOpen] = useState(false)
-    const [searchQuery, setSearchQuery] = useState("")
+    const [searchQuery, setSearchQuery] = useState<string>("")
 
-    const filteredResults = searchResults.filter(
-        (result) =>
-            result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            result.content.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
+    const { data: articleResult } = useSWR(["/articles", searchQuery], () => articlefetcher(searchQuery), {
+        keepPreviousData: true,
+    });
+
+    const { data: newsResult } = useSWR(["/news", searchQuery], () => Newsfetcher(searchQuery), {
+        keepPreviousData: true,
+    });
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -137,20 +134,20 @@ export default function SearchModal() {
                         <TabsTrigger value="articles">articles</TabsTrigger>
                         <TabsTrigger value="news">news</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="news">
+                    <TabsContent value="articles">
                         <ScrollArea className="max-h-[60vh] p-4">
-                            {filteredResults.length > 0 ? (
-                                filteredResults.map((result) => (
+                            {articleResult && articleResult.length > 0 ? (
+                                articleResult.map((result) => (
                                     <div
-                                        key={result.id}
+                                        key={result.id_article}
                                         className="mb-4 p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow"
                                     >
-                                        <h3 className="text-lg font-semibold mb-2">{result.title}</h3>
+                                        <h3 className="text-lg font-semibold mb-2">{result.article_name}</h3>
                                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
                                             {result.content.length > 100 ? `${result.content.substring(0, 100)}...` : result.content}
                                         </p>
                                         <Badge variant="secondary" className="text-xs">
-                                            {result.tag}
+                                            <ClockAlert className='h-auto w-4 mr-2'/>{result.average_read}mn
                                         </Badge>
                                     </div>
                                 ))
@@ -159,20 +156,20 @@ export default function SearchModal() {
                             )}
                         </ScrollArea>
                     </TabsContent>
-                    <TabsContent value="articles">
+                    <TabsContent value="news">
                         <ScrollArea className="max-h-[60vh] p-4">
-                            {filteredResults.length > 0 ? (
-                                filteredResults.map((result) => (
+                            {newsResult && newsResult.length > 0 ? (
+                                newsResult.map((result) => (
                                     <div
                                         key={result.id}
                                         className="mb-4 p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow"
                                     >
-                                        <h3 className="text-lg font-semibold mb-2">{result.title}</h3>
+                                        <h3 className="text-lg font-semibold mb-2">{result.news_title}</h3>
                                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                                            {result.content.length > 100 ? `${result.content.substring(0, 100)}...` : result.content}
+                                            {result.news_content.length > 100 ? `${result.news_content.substring(0, 100)}...` : result.news_content}
                                         </p>
                                         <Badge variant="secondary" className="text-xs">
-                                            {result.tag}
+                                            {result.created_at}
                                         </Badge>
                                     </div>
                                 ))
