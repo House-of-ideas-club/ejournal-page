@@ -1,18 +1,34 @@
+'use client'
 import { Clock } from 'lucide-react'
-import Link from "next/link"
+import {fetchCategoryById} from "@/components/ui/Carousel";
+import {useRouter} from "next/navigation";
+
 
 interface MiniArticleCardProps {
     title: string
     date: string
-    readTime: string
-    href: string
+    readTime: number | null
+    category: number
+    id:number
 }
 
-export function MiniArticleCard({ title, date, readTime, href }: MiniArticleCardProps) {
+export function MiniArticleCard({ title,category,id, date, readTime }: MiniArticleCardProps) {
+    const router = useRouter();
+    const handleRouterClick = async (categoryId: number, articleId: number) => {
+        try {
+            const category = await fetchCategoryById(categoryId);
+            const categoryName = category?.category_name || "unknown";
+
+            router.push(`/articles/${categoryName}/${articleId}`);
+        } catch (error) {
+            console.error("Error fetching category:", error);
+        }
+    };
+
     return (
-        <Link
-            href={href}
-            className="block p-3 text-start border-b-[1px] mx-3   transition-colors duration-200"
+        <div
+            onClick={()=>handleRouterClick(category,id)}
+            className="block p-3 text-start border-b-[1px] mx-3 cursor-default hover:translate-y-[2px]  transition-colors duration-200"
         >
             <h1 className="font-medium text-start text-xs line-clamp-1 mb-2">{title}</h1>
             <div className="flex items-center text-xs text-gray-500 space-x-3">
@@ -22,6 +38,6 @@ export function MiniArticleCard({ title, date, readTime, href }: MiniArticleCard
                     <span>{readTime} min read</span>
                 </div>
             </div>
-        </Link>
+        </div>
     )
 }

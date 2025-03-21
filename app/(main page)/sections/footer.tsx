@@ -113,7 +113,7 @@ export default function Footer() {
 
             <div className="mt-8 p-5 hidden lg:block lg:w-1/2">
                 <Link
-                    href="https://www.instagram.com/hi.club.alger3/"
+                    href="https://www.instagram.com/houseofideas.club/"
                     className="block transform hover:scale-[1.02] transition-transform"
                 >
                     <InstagramProfile />

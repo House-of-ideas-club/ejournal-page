@@ -46,21 +46,16 @@ const pargraph= 'check out and expansion of unique, interesting, genre of articl
                   transition={{duration: 0.6}}
                   className="relative w-full  text-center lg:text-left z-10"
               >
-                  {/*
-                    initial={{x:'-104%'}}
-                    whileInView={{x:0}}
-                    viewport={{once: true}}
-                    transition={{duration: 0.5, delay: 0.4, ease: "easeInOut"}}
-
-                  */}
                 <h2 className=" text-2xl [@media(min-width:360px)]:text-4xl sm:text-6xl  py-3  lg:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500  text-transparent bg-clip-text">
                   Explore our categories
                 </h2>
                   <div className='py-4 hidden [@media(min-width:360px)]:inline '>
                        <DescriptionFliper paragraph={pargraph} className='  dark:text-white mb-8 text-black '/>
                   </div>
+                <a href="/articles" target="_blank" rel="noopener noreferrer">
+                <Button
 
-                <Button className="group relative  inline-flex items-center justify-center px-8 py-6 text-md text-white transition-all duration-300 ease-in-out bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full overflow-hidden shadow-lg hover:shadow-purple-500/25">
+                    className="group relative  inline-flex items-center justify-center px-8 py-6 text-md text-white transition-all duration-300 ease-in-out bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full overflow-hidden shadow-lg hover:shadow-purple-500/25">
                             <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"></span>
                   <span
                       className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
@@ -68,6 +63,7 @@ const pargraph= 'check out and expansion of unique, interesting, genre of articl
                              <ArrowRight className="ml-2  size-5 transition-transform duration-300 ease-in-out group-hover:translate-x-1"/>
                            </span>
                 </Button>
+                </a>
               </motion.div>
             </div>
             <div className="lg:w-[50%]  flex justify-center items-center">
@@ -97,11 +93,7 @@ const pargraph= 'check out and expansion of unique, interesting, genre of articl
                               {category.title}
                             </h3>
                           </div>
-                          <div
-                              className="absolute top-3 right-3 sm:top-6 sm:right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                            <ArrowRight
-                                className="ml-2 hidden sm:inline h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 ease-in-out group-hover:translate-x-1"/>
-                          </div>
+
                         </div>
                       </div>
                     </motion.div>

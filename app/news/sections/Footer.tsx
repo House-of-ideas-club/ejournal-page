@@ -1,5 +1,5 @@
 import {FacebookIcon, Instagram, LinkedInIcon, Tiktok} from "@/components/ui/Icons";
-import {ThemeSwitcher} from "@/components/theme-switcher";
+
 
 
 export default function Footer() {

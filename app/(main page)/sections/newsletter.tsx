@@ -1,36 +1,47 @@
 "use client"
-
 import React, { useState} from "react"
 import {Mail} from "lucide-react"
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
-
 import Toast from "@/components/ui/toast";
 import {useForm} from "react-hook-form";
 import { SubmitHandler} from "react-hook-form"
-import { motion } from "motion/react"
-import {shadowVariants} from "@/utils/types";
-import DescriptionFliper from "@/components/ui/Description-Fliper";
+import {insert} from "@/utils/supabase/client-api";
+import {Tables} from "@/utils/types";
+
+
 
 
 export default function CoolNewsletter() {
-    const [showToast, setShowToast] = useState(false)
-    const {register,handleSubmit
-    } = useForm()
+    const [showToast, setShowToast] = useState<{is:boolean,m:string }>({is:false,m:'' })
+    const {register,handleSubmit, watch, formState: {errors}, reset
+    } = useForm<Tables<'news_letters_subs'>>()
+    const emailValue = watch("email", "");
 
-    const onSubmit: SubmitHandler<any> = (data) => {
 
+
+
+    const onSubmit: SubmitHandler<Tables<'news_letters_subs'>> = (data) => {
         const insertdata = async (data: any) => {
             try {
-                console.log('send');
+                const issuccess = await insert<Tables<'news_letters_subs'>>('news_letters_subs', data)
+                if (issuccess) {
+                    setShowToast({is:true,m:'thanks for subscribing'});
+                    reset();
+                }else {
+                    setShowToast({is:true,m:'hmmmm 🤨'});
+                }
+
+                console.log(issuccess);
             } catch (error) {
-                console.error(error);
+                console.error('zb', error);
             }
         };
-        insertdata(data).catch(r => console.error(r));
 
-    }
-1
+        insertdata(data).catch((r) => console.error(r));
+    };
+
+
     return (
         <div className='h-screen flex items-center w-full  relative justify-center'>
             <div className="relative overflow-hidden py-8    [@media(min-width:360px)]:py-16  sm:py-24 w-full">
@@ -61,17 +72,19 @@ export default function CoolNewsletter() {
                                         <Input
                                             id="email"
                                             type="email"
-                                            placeholder=" your email"
+                                            placeholder="Your email"
                                             {...register("email", {
-                                                required: "email is required",
+                                                required: "Email is required",
                                                 pattern: {
                                                     value: /\S+@\S+\.\S+/,
                                                     message: "Please enter a valid email address"
                                                 }
                                             })}
-                                            className="placeholder:text-white bg-white/20 text-white placeholder-white border-0  focus-visible:ring-2  focus-visible:ring-purple-400 "
+                                            className={`placeholder:text-white bg-white/20 text-white placeholder-white border-0 focus-visible:ring-2 focus-visible:ring-purple-400 ${
+                                                errors.email && !emailValue ? 'bg-red-900/90' : ''
+                                            }`}
                                         />
-                                        {/*{errors.email && <p className="text-red-500 text-sm mt-1 self-start">{errors}</p>}*/}
+
                                     </div>
                                     <div className="mt-3 sm:mt-0 sm:ml-3">
                                         <Button
@@ -93,7 +106,7 @@ export default function CoolNewsletter() {
                 <Toast
                     show={showToast}
                     message="thank you for subscribing"
-                    onClose={() => setShowToast(false)}
+                    onCloseAction={() => setShowToast({is:false,m:''})}
                 />
 
             </div>

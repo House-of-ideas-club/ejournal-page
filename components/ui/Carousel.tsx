@@ -3,22 +3,39 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
-import type { StaticImageData } from "next/image"
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react"
+import {Tables} from "@/utils/types";
+import {fetch} from "@/utils/supabase/client-api";
 
-export interface article {
-    id: number
-    title: string
-    img: StaticImageData
-    description: string
+
+interface Props {
+    articles: Tables<'articles'>[]
+}
+export async function fetchCategoryById(Id: number): Promise<any> {
+    const result = await fetch<Tables<"categories">[]>(
+        "categories",
+        ["*"],
+        (q) => q.eq("category_id", Id)
+    );
+
+    return Array.isArray(result) && result.length > 0 ? result[0] : {};
 }
 
-interface VideoCarouselProps {
-    articles: article[]
-}
+const Carousel: React.FC<Props> = ({ articles }) => {
 
-const Carousel: React.FC<VideoCarouselProps> = ({ articles }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
+    const router = useRouter();
+    const handleRouterClick = async (categoryId: number, articleId: number) => {
+        try {
+            const category = await fetchCategoryById(categoryId);
+            const categoryName = category?.category_name || "unknown";
+
+            router.push(`/articles/${categoryName}/${articleId}`);
+        } catch (error) {
+            console.error("Error fetching category:", error);
+        }
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -35,7 +52,8 @@ const Carousel: React.FC<VideoCarouselProps> = ({ articles }) => {
                     (article, index) =>
                         index === currentIndex && (
                             <motion.div
-                                key={article.id}
+                                key={article.id_article}
+
                                 className="absolute w-[95%] h-[85%] lg:h-[70%] bg-black bg-opacity-60 rounded-2xl shadow-xl shadow-black flex items-center justify-center overflow-hidden"
                                 initial={{ opacity: 0, x: 50 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -45,17 +63,18 @@ const Carousel: React.FC<VideoCarouselProps> = ({ articles }) => {
                                 <div className="relative w-full h-full group">
                                     <div className="absolute  inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-80" />
                                     <img
-                                        alt={article.title}
-                                        src={article.img.src || "/placeholder.svg"}
+                                        alt={article.article_name ?? "No title available"}
+                                        src={article.picture_link || "/placeholder.svg"}
                                         className="w-full h-full object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80" />
                                     <div className="absolute max-w-96 bottom-0 left-0 right-0 p-6 text-white">
-                                        <span className="text-3xl font-bold">{article.title}</span>
-                                        <p className="text-sm opacity-80 line-clamp-6 mt-1 mb-4">{article.description}</p>
+                                        <span className="text-3xl font-bold">{article.article_name}</span>
+                                        <p className="text-sm opacity-80 line-clamp-6 mt-1 mb-4">{article.intro}</p>
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
+                                            onClick={() => handleRouterClick(article.category_id, article.id_article)}
                                             className="relative group flex items-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-white/20 to-white/10 border border-white/10 text-white font-medium transition-all duration-300 hover:border-white/20"
                                         >
                                             Read More

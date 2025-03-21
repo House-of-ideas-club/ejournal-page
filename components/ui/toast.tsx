@@ -5,24 +5,24 @@ import {motion, AnimatePresence} from 'motion/react'
 import {X} from 'lucide-react'
 
 interface ToastProps {
-    show: boolean
+    show: { is:boolean,m:string }
     message: string
-    onClose: () => void
+    onCloseAction: () => void
 }
 
-export default function Toast({show, message, onClose}: ToastProps) {
+export default function Toast({show, onCloseAction}: ToastProps) {
     const [isVisible, setIsVisible] = useState(false)
 
     useEffect(() => {
-        if (show) {
+        if (show.is) {
             setIsVisible(true)
             const timer = setTimeout(() => {
                 setIsVisible(false)
-                onClose()
+                onCloseAction()
             }, 5000)
             return () => clearTimeout(timer)
         }
-    }, [show, onClose])
+    }, [show, onCloseAction])
 
     return (
         <AnimatePresence>
@@ -37,11 +37,11 @@ export default function Toast({show, message, onClose}: ToastProps) {
                 >
                     <div className="bg-gradient-to-r m-2  from-purple-600 to-violet-600 rounded-lg shadow-lg overflow-hidden">
                         <div className="p-4 flex items-center justify-between">
-                            <p className="text-white font-medium">{message}</p>
+                            <p className="text-white font-medium">{show.m}</p>
                             <button
                                 onClick={() => {
                                     setIsVisible(false)
-                                    onClose()
+                                    onCloseAction()
                                 }}
                                 className="text-white hover:text-gray-200 transition-colors"
                             >

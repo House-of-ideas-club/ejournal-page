@@ -1,49 +1,28 @@
-import img2 from "@/app/assets/img2.webp";
-import img1 from "@/app/assets/img1.webp";
-import img3 from "@/app/assets/img3.webp";
-import img4 from "@/app/assets/img4.webp";
 import { motion } from "motion/react";
 import Carousel from "@/components/ui/Carousel";
 import ThickWordTransform from "@/components/ThickWordTransform";
 import DescriptionFliper from "@/components/ui/Description-Fliper";
-
+import {Tables} from "@/utils/types";
+import {fetch} from "@/utils/supabase/client-api";
+import useSWR from "swr";
 const paragraph = `House of Ideas E-Journal, a website run by Secretariat Department, 
 sharing articles on science, e-commerce & finance, and many more, adding a voice to the club and its community.`;
 
-const articles = [
-    {
-        id: 1,
-        title: "Dangers of Tiktok",
-        img: img2,
-        description: `TikTok has taken the world by storm, becoming one of the most popular social media platforms, 
-        especially among younger generations. However, beneath its entertaining surface lies a host of concerns, 
-        including privacy risks, the spread of misinformation, and the impact of short-form content on attention spans.`
-    },
-    {
-        id: 2,
-        title: "VR Future",
-        img: img1,
-        description: `Virtual Reality (VR) is no longer a distant dream but an evolving reality that is reshaping 
-        how we interact with the digital world. This article explores the rapid advancements in VR technology.`
-    },
-    {
-        id: 3,
-        title: "Dangers of AGI",
-        img: img3,
-        description: `Artificial General Intelligence (AGI) represents a future where machines could achieve human-like 
-        cognitive abilities, making decisions independently and potentially surpassing human intelligence.`
-    },
-    {
-        id: 4,
-        title: "DEEP SEEK R1",
-        img: img4,
-        description: `The DEEP SEEK R1 is a cutting-edge technological innovation that is set to revolutionize 
-        the field of artificial intelligence and robotics. Equipped with advanced machine learning algorithms 
-        and state-of-the-art sensory capabilities.`
-    }
-];
+const fetcher = async () => {
+
+    return await fetch<Tables<'articles'>>(
+        "articles",
+        ["*"],
+        (q) => q.limit(3).order("created_at", {ascending: false})
+    ) as Tables<'articles'>[];
+
+
+}
 
 export default function Hero() {
+    const {data} = useSWR('/articles', fetcher)
+
+
     return (
         <>
             <style>
@@ -86,7 +65,7 @@ export default function Hero() {
                     }}
                     transition={{duration: 0.75, delay: 1}}
                     className="flex flex-col justify-center items-center w-full  min-h-screen xl:w-[40%]">
-                    <Carousel articles={articles}/>
+                    <Carousel articles={data ?? []}/>
                 </motion.div>
             </div>
 
@@ -162,7 +141,7 @@ export default function Hero() {
                                 </motion.span>
                             </div>
 
-                            <Carousel articles={articles}/>
+                            <Carousel articles={data ?? []}/>
                         </div>
                     </section>
                 </div>
