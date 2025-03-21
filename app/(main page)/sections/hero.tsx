@@ -5,7 +5,7 @@ import DescriptionFliper from "@/components/ui/Description-Fliper";
 import {Tables} from "@/utils/types";
 import {fetch} from "@/utils/supabase/client-api";
 import useSWR from "swr";
-const paragraph = `House of Ideas E-Journal, a website run by Secretariat Department, 
+const paragraph = `House of Ideas Articles, a website dedicated for learning, 
 sharing articles on science, e-commerce & finance, and many more, adding a voice to the club and its community.`;
 
 const fetcher = async () => {
@@ -52,7 +52,7 @@ export default function Hero() {
                         </span>
                     </motion.span>
                     <span className="text-center" style={{fontWeight: 1000}}>
-                        <ThickWordTransform initialWord="WELCOME TO " transformedWord="E-JOURNAL"/>
+                        <ThickWordTransform initialWord="WELCOME TO " transformedWord="ARTICLES"/>
                     </span>
                     <DescriptionFliper className='text-xl' paragraph={paragraph}/>
                 </div>
@@ -69,7 +69,7 @@ export default function Hero() {
                 </motion.div>
             </div>
 
-            {/*phone*/}
+
             <div className="flex lg:hidden flex-col px-4 ">
                 <div className="overflow-y-scroll snap-y snap-mandatory h-screen">
                     <section className="snap-start">
@@ -87,7 +87,7 @@ export default function Hero() {
                                 </span>
                             </motion.span>
                             <span className="text-center" style={{fontWeight: 1000}}>
-                                <ThickWordTransform initialWord="WELCOME TO " transformedWord="E-JOURNAL"/>
+                                <ThickWordTransform initialWord="WELCOME TO" transformedWord="ARTICLES"/>
                             </span>
                             <DescriptionFliper className='text-sm [@media(min-width:360px)]:text-xl' paragraph={paragraph}/>
                         </div>
