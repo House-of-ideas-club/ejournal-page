@@ -1,9 +1,13 @@
 
 import {cn} from "@/lib/utils";
 import {motion} from "motion/react";
-import {IconProps} from "@/utils/types";
 
 
+interface IconProps {
+    className?: string;
+    animate?: boolean ;
+
+}
 const icon = {
     hidden: {
         pathLength: 0,
